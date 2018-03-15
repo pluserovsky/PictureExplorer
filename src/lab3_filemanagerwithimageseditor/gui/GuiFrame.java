@@ -46,6 +46,7 @@ public class GuiFrame extends javax.swing.JFrame {
         loadPicButton = new javax.swing.JButton();
         monochromeButton = new javax.swing.JButton();
         rotateButton = new javax.swing.JButton();
+        blurButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -88,6 +89,13 @@ public class GuiFrame extends javax.swing.JFrame {
             }
         });
 
+        blurButton.setText("Blur");
+        blurButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                blurButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -106,7 +114,8 @@ public class GuiFrame extends javax.swing.JFrame {
                                     .addComponent(monochromeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(reverseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(loadPicButton)))
+                                .addComponent(loadPicButton))
+                            .addComponent(blurButton))
                         .addGap(91, 91, 91))))
         );
         layout.setVerticalGroup(
@@ -122,7 +131,9 @@ public class GuiFrame extends javax.swing.JFrame {
                 .addComponent(monochromeButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rotateButton)
-                .addGap(73, 73, 73))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(blurButton)
+                .addGap(44, 44, 44))
         );
 
         pack();
@@ -150,6 +161,12 @@ public class GuiFrame extends javax.swing.JFrame {
         String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.RotateImage", "rotateImage", picturePanelPath);
         fitToPicturePanel(newPic);
     }//GEN-LAST:event_rotateButtonActionPerformed
+
+    private void blurButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blurButtonActionPerformed
+        JavaClassLoader javaClassLoader = new JavaClassLoader();
+        String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.BlurImage", "blurImage", picturePanelPath);
+        fitToPicturePanel(newPic);
+    }//GEN-LAST:event_blurButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,6 +204,7 @@ public class GuiFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton blurButton;
     private javax.swing.JButton loadPicButton;
     private javax.swing.JButton monochromeButton;
     private javax.swing.JPanel picturePanel;
