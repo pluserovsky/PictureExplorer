@@ -7,15 +7,20 @@ package PictureExplorer.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import PictureExplorer.classLoader.JavaClassLoader;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.Collection;
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -24,12 +29,18 @@ import PictureExplorer.classLoader.JavaClassLoader;
 public class GuiFrame extends javax.swing.JFrame {
 
     String picturePanelPath = "resources\\cats\\kot2.jpg";
+    String currentClickedPath = "";
+    ArrayList<String> files;
+    JLabel[] pics;
+    ImageIcon imageIcon, newIcon;
+    Image img, newimg;
 
     /**
      * Creates new form GuiFrame
      */
     public GuiFrame() {
         initComponents();
+
     }
 
     /**
@@ -49,6 +60,8 @@ public class GuiFrame extends javax.swing.JFrame {
         blurButton = new javax.swing.JButton();
         effectsLabel = new javax.swing.JLabel();
         loadingLabel = new javax.swing.JLabel();
+        explorerScrollPane = new javax.swing.JScrollPane();
+        thumbsPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,11 +69,11 @@ public class GuiFrame extends javax.swing.JFrame {
         picturePanel.setLayout(picturePanelLayout);
         picturePanelLayout.setHorizontalGroup(
             picturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 370, Short.MAX_VALUE)
+            .addGap(0, 340, Short.MAX_VALUE)
         );
         picturePanelLayout.setVerticalGroup(
             picturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 311, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         reverseButton.setText("Reverse");
@@ -102,59 +115,75 @@ public class GuiFrame extends javax.swing.JFrame {
 
         loadingLabel.setText(".");
 
+        thumbsPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                thumbsPanelMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout thumbsPanelLayout = new javax.swing.GroupLayout(thumbsPanel);
+        thumbsPanel.setLayout(thumbsPanelLayout);
+        thumbsPanelLayout.setHorizontalGroup(
+            thumbsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 443, Short.MAX_VALUE)
+        );
+        thumbsPanelLayout.setVerticalGroup(
+            thumbsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 479, Short.MAX_VALUE)
+        );
+
+        explorerScrollPane.setViewportView(thumbsPanel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(551, Short.MAX_VALUE)
+                .addContainerGap(207, Short.MAX_VALUE)
+                .addComponent(picturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(picturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(effectsLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(loadingLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(blurButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(rotateButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(monochromeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(reverseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(loadPicButton)))
-                        .addGap(91, 91, 91))))
+                    .addComponent(effectsLabel)
+                    .addComponent(reverseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(monochromeButton)
+                    .addComponent(rotateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(blurButton, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(loadPicButton)
+                    .addComponent(loadingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(explorerScrollPane)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(picturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(effectsLabel)
-                    .addComponent(loadingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(2, 2, 2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(loadPicButton)
-                    .addComponent(reverseButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(monochromeButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rotateButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(blurButton)
-                .addGap(44, 44, 44))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(picturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(effectsLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(loadingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reverseButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(monochromeButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rotateButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(blurButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(loadPicButton)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(188, 188, 188)
+                .addComponent(explorerScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void loadPicButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPicButtonActionPerformed
-
+        loadThumbnails();
         fitToPicturePanel(picturePanelPath);
     }//GEN-LAST:event_loadPicButtonActionPerformed
 
@@ -203,6 +232,10 @@ public class GuiFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_blurButtonActionPerformed
 
+    private void thumbsPanelMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_thumbsPanelMousePressed
+
+    }//GEN-LAST:event_thumbsPanelMousePressed
+
     /**
      * @param args the command line arguments
      */
@@ -241,12 +274,14 @@ public class GuiFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton blurButton;
     private javax.swing.JLabel effectsLabel;
+    private javax.swing.JScrollPane explorerScrollPane;
     private javax.swing.JButton loadPicButton;
     private javax.swing.JLabel loadingLabel;
     private javax.swing.JButton monochromeButton;
     private javax.swing.JPanel picturePanel;
     private javax.swing.JButton reverseButton;
     private javax.swing.JButton rotateButton;
+    private javax.swing.JPanel thumbsPanel;
     // End of variables declaration//GEN-END:variables
 
     private void fitToPicturePanel(String pic) {
@@ -261,4 +296,62 @@ public class GuiFrame extends javax.swing.JFrame {
         picturePanel.add(imageLabel, BorderLayout.CENTER);
         picturePanel.validate();
     }
+
+    private void loadThumbnails() {
+        files = fileNames("resources\\cats\\");
+        pics = new JLabel[files.size()];
+
+        for (int i = 0; i < files.size(); i++) {
+            imageIcon = new ImageIcon(files.get(i));
+            img = imageIcon.getImage();
+            newimg = img.getScaledInstance(120, 120, java.awt.Image.SCALE_SMOOTH);
+            newIcon = new ImageIcon(newimg);
+            SoftReference sr = new SoftReference(new JLabel(newIcon));
+            JLabel picLabel = (JLabel)sr.get();
+            pics[i] = picLabel;
+            pics[i].addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    onMouseClicked(e);
+                }
+            });
+        }
+        thumbsPanel.setLayout(new java.awt.FlowLayout());
+        for (JLabel pic : pics) {
+            thumbsPanel.add(pic);
+        }
+        explorerScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        explorerScrollPane.repaint();
+    }
+
+    private void onMouseClicked(MouseEvent e) {
+        for (int i = 0; i < files.size(); i++) {
+            pics[i].setBorder(null);
+            if (e.getSource() == pics[i]) {
+                currentClickedPath = files.get(i);
+                pics[i].setBorder(BorderFactory
+                        .createLineBorder(Color.BLUE, 3));
+
+            }
+        }
+    }
+
+    private ArrayList<String> fileNames(String directoryPath) {
+
+        File dir = new File(directoryPath);
+        ArrayList<String> files = new ArrayList<>();
+
+        if (dir.isDirectory()) {
+            File[] listFiles = dir.listFiles();
+
+            for (File file : listFiles) {
+                if (file.isFile()) {
+                    files.add(file.getPath());
+                }
+            }
+        }
+
+        return files;
+    }
+
 }
