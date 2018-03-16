@@ -31,7 +31,7 @@ public class BlurImage {
         int max = 400, radius = 10;
         int a1 = 0, r1 = 0, g1 = 0, b1 = 0;
         c = new Color[max];
-        int x = 1, y = 1, x1, y1, ex = 5, d = 0;
+        int x = 1, y = 1, x1, y1, d = 0;
         for (x = radius; x < inputFile.getHeight() - radius; x++) {
             for (y = radius; y < inputFile.getWidth() - radius; y++) {
 
