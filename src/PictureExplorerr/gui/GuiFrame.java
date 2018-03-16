@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package lab3_filemanagerwithimageseditor.gui;
+package PictureExplorerr.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Image;
@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import lab3_filemanagerwithimageseditor.classLoader.JavaClassLoader;
+import PictureExplorer.classLoader.JavaClassLoader;
 
 /**
  *
@@ -162,7 +162,7 @@ public class GuiFrame extends javax.swing.JFrame {
         Thread t = new Thread(() -> {
             loadingLabel.setText("loading...");
             JavaClassLoader javaClassLoader = new JavaClassLoader();
-            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.InverseColors", "invertImage", picturePanelPath);
+            String newPic = javaClassLoader.invokeClassMethod("PictureExplorer.plugins.InverseColors", "invertImage", picturePanelPath);
             fitToPicturePanel(newPic);
             loadingLabel.setText("loaded");
         });
@@ -173,7 +173,7 @@ public class GuiFrame extends javax.swing.JFrame {
         Thread t = new Thread(() -> {
             loadingLabel.setText("loading...");
             JavaClassLoader javaClassLoader = new JavaClassLoader();
-            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.MonochromeColors", "monochromeImage", picturePanelPath);
+            String newPic = javaClassLoader.invokeClassMethod("PictureExplorer.plugins.MonochromeColors", "monochromeImage", picturePanelPath);
             fitToPicturePanel(newPic);
             loadingLabel.setText("loaded");
         });
@@ -184,7 +184,7 @@ public class GuiFrame extends javax.swing.JFrame {
         Thread t = new Thread(() -> {
             loadingLabel.setText("loading...");
             JavaClassLoader javaClassLoader = new JavaClassLoader();
-            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.RotateImage", "rotateImage", picturePanelPath);
+            String newPic = javaClassLoader.invokeClassMethod("PictureExplorer.plugins.RotateImage", "rotateImage", picturePanelPath);
             fitToPicturePanel(newPic);
             loadingLabel.setText("loaded");
         });
@@ -195,7 +195,7 @@ public class GuiFrame extends javax.swing.JFrame {
         Thread t = new Thread(() -> {
             loadingLabel.setText("loading...");
             JavaClassLoader javaClassLoader = new JavaClassLoader();
-            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.BlurImage", "blurImage", picturePanelPath);
+            String newPic = javaClassLoader.invokeClassMethod("PictureExplorer.plugins.BlurImage", "blurImage", picturePanelPath);
             fitToPicturePanel(newPic);
             loadingLabel.setText("loaded");
         });
