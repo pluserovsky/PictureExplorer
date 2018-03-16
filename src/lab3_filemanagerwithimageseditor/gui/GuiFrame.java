@@ -47,6 +47,8 @@ public class GuiFrame extends javax.swing.JFrame {
         monochromeButton = new javax.swing.JButton();
         rotateButton = new javax.swing.JButton();
         blurButton = new javax.swing.JButton();
+        effectsLabel = new javax.swing.JLabel();
+        loadingLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -58,7 +60,7 @@ public class GuiFrame extends javax.swing.JFrame {
         );
         picturePanelLayout.setVerticalGroup(
             picturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 320, Short.MAX_VALUE)
+            .addGap(0, 311, Short.MAX_VALUE)
         );
 
         reverseButton.setText("Reverse");
@@ -96,6 +98,10 @@ public class GuiFrame extends javax.swing.JFrame {
             }
         });
 
+        effectsLabel.setText("Effect status:");
+
+        loadingLabel.setText(".");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,15 +113,19 @@ public class GuiFrame extends javax.swing.JFrame {
                         .addComponent(picturePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rotateButton)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(effectsLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(loadingLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(blurButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(rotateButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(monochromeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(reverseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(loadPicButton))
-                            .addComponent(blurButton))
+                                .addComponent(loadPicButton)))
                         .addGap(91, 91, 91))))
         );
         layout.setVerticalGroup(
@@ -123,7 +133,11 @@ public class GuiFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(picturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(2, 2, 2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(effectsLabel)
+                    .addComponent(loadingLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loadPicButton)
                     .addComponent(reverseButton))
@@ -145,27 +159,48 @@ public class GuiFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_loadPicButtonActionPerformed
 
     private void reverseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reverseButtonActionPerformed
-        JavaClassLoader javaClassLoader = new JavaClassLoader();
-        String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.InverseColors", "invertImage", picturePanelPath);
-        fitToPicturePanel(newPic);
+        Thread t = new Thread(() -> {
+            loadingLabel.setText("loading...");
+            JavaClassLoader javaClassLoader = new JavaClassLoader();
+            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.InverseColors", "invertImage", picturePanelPath);
+            fitToPicturePanel(newPic);
+            loadingLabel.setText("loaded");
+        });
+        t.start();
     }//GEN-LAST:event_reverseButtonActionPerformed
 
     private void monochromeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_monochromeButtonActionPerformed
-        JavaClassLoader javaClassLoader = new JavaClassLoader();
-        String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.MonochromeColors", "monochromeImage", picturePanelPath);
-        fitToPicturePanel(newPic);
+        Thread t = new Thread(() -> {
+            loadingLabel.setText("loading...");
+            JavaClassLoader javaClassLoader = new JavaClassLoader();
+            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.MonochromeColors", "monochromeImage", picturePanelPath);
+            fitToPicturePanel(newPic);
+            loadingLabel.setText("loaded");
+        });
+        t.start();
     }//GEN-LAST:event_monochromeButtonActionPerformed
 
     private void rotateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rotateButtonActionPerformed
-        JavaClassLoader javaClassLoader = new JavaClassLoader();
-        String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.RotateImage", "rotateImage", picturePanelPath);
-        fitToPicturePanel(newPic);
+        Thread t = new Thread(() -> {
+            loadingLabel.setText("loading...");
+            JavaClassLoader javaClassLoader = new JavaClassLoader();
+            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.RotateImage", "rotateImage", picturePanelPath);
+            fitToPicturePanel(newPic);
+            loadingLabel.setText("loaded");
+        });
+        t.start();
     }//GEN-LAST:event_rotateButtonActionPerformed
 
     private void blurButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_blurButtonActionPerformed
-        JavaClassLoader javaClassLoader = new JavaClassLoader();
-        String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.BlurImage", "blurImage", picturePanelPath);
-        fitToPicturePanel(newPic);
+        Thread t = new Thread(() -> {
+            loadingLabel.setText("loading...");
+            JavaClassLoader javaClassLoader = new JavaClassLoader();
+            String newPic = javaClassLoader.invokeClassMethod("lab3_filemanagerwithimageseditor.plugins.BlurImage", "blurImage", picturePanelPath);
+            fitToPicturePanel(newPic);
+            loadingLabel.setText("loaded");
+        });
+        t.start();
+
     }//GEN-LAST:event_blurButtonActionPerformed
 
     /**
@@ -205,7 +240,9 @@ public class GuiFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton blurButton;
+    private javax.swing.JLabel effectsLabel;
     private javax.swing.JButton loadPicButton;
+    private javax.swing.JLabel loadingLabel;
     private javax.swing.JButton monochromeButton;
     private javax.swing.JPanel picturePanel;
     private javax.swing.JButton reverseButton;

@@ -6,6 +6,8 @@
 package lab3_filemanagerwithimageseditor.plugins;
 
 import java.awt.Color;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +18,7 @@ import javax.imageio.ImageIO;
  * @author Luk
  */
 public class RotateImage extends InverseColors {
-
+    double radians = 3.1416;
     public String rotateImage(String imageName) {
         inputFile = null;
 
@@ -25,15 +27,10 @@ public class RotateImage extends InverseColors {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        int width = inputFile.getWidth();
-        int height = inputFile.getHeight();
-        BufferedImage newImage = new BufferedImage(height, width, inputFile.getType());
-
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < height; j++) {
-                newImage.setRGB(height - 1 - j, i, inputFile.getRGB(i, j));
-            }
-        }
+        AffineTransform transform = new AffineTransform();
+    transform.rotate(radians, inputFile.getWidth()/2, inputFile.getHeight()/2);
+    AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+    inputFile = op.filter(inputFile, null);
 
        // return newImage;
 
